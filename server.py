@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from goose3 import Goose
 from transformers import pipeline
 from PyPDF2 import PdfReader
@@ -94,6 +94,7 @@ def extract_subjects(visual_matches):
     return subjects
 
 @app.route('/imgQuery', methods=['POST'])
+@cross_origin()
 def img_query():
     if(params['url']==''):
         return jsonify({'response': "Please upload an image first"}), 200
@@ -119,6 +120,7 @@ def img_query():
 
 
 @app.route('/uploadImg', methods=['POST'])
+@cross_origin()
 def img_upload():
     if 'image' not in request.files:
         return jsonify({'error': 'No image provided'}), 400
@@ -152,6 +154,7 @@ def img_upload():
 
 
 @app.route('/summarizeUrl', methods=['POST'])
+@cross_origin()
 def summarize_text():
     data = request.get_json()
     urlReceived = data['url']
@@ -237,6 +240,7 @@ def user_input(user_question):
 
 
 @app.route('/processText', methods=['POST'])
+@cross_origin()
 def process_text():
     data = request.get_json()
     usertext = data['text']
@@ -249,6 +253,7 @@ def process_text():
 
 
 @app.route('/process', methods=['POST'])
+@cross_origin()
 def process_pdf():
     print("Hello from process_pdf")
     try:
@@ -269,6 +274,7 @@ def process_pdf():
 
 
 @app.route('/chat', methods=['POST'])
+@cross_origin()
 def chat_with_pdf():
     try:
         user_question = request.json['message']
