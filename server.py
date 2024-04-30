@@ -42,8 +42,7 @@ os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 app = Flask(__name__)
-CORS(app)
-
+CORS(app, resources={r"/*": {"origins": "http://192.168.0.102:5173"}})
 
 def get_gemini_response(jsonInfo):
     prompt = str(jsonInfo)
@@ -94,7 +93,7 @@ def extract_subjects(visual_matches):
     return subjects
 
 @app.route('/imgQuery', methods=['POST'])
-@cross_origin()
+@cross_origin(origin='http://192.168.0.102:5173')
 def img_query():
     if(params['url']==''):
         return jsonify({'response': "Please upload an image first"}), 200
@@ -120,7 +119,7 @@ def img_query():
 
 
 @app.route('/uploadImg', methods=['POST'])
-@cross_origin()
+@cross_origin(origin='http://192.168.0.102:5173')
 def img_upload():
     if 'image' not in request.files:
         return jsonify({'error': 'No image provided'}), 400
@@ -154,7 +153,7 @@ def img_upload():
 
 
 @app.route('/summarizeUrl', methods=['POST'])
-@cross_origin()
+@cross_origin(origin='http://192.168.0.102:5173')
 def summarize_text():
     data = request.get_json()
     urlReceived = data['url']
@@ -253,7 +252,7 @@ def process_text():
 
 
 @app.route('/process', methods=['POST'])
-@cross_origin()
+@cross_origin(origin='http://192.168.0.102:5173')
 def process_pdf():
     print("Hello from process_pdf")
     try:
@@ -274,7 +273,7 @@ def process_pdf():
 
 
 @app.route('/chat', methods=['POST'])
-@cross_origin()
+@cross_origin(origin='http://192.168.0.102:5173')
 def chat_with_pdf():
     try:
         user_question = request.json['message']
